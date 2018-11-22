@@ -5,6 +5,7 @@ A simple Terrain Generator for Terasology
 - [x] A new module repo for the world generator implemented and located in a public GitHub repository.
 - [x] Include screenshots of the generated world in action in the repository. Including it in the README would be great.
   ![Terrain](https://github.com/StripedMonkey/MonkeyGenerator/wiki/Examples.png "Something I've done")
+  The bottom section is my first attempt at creating terrain that actually loaded, the terrain on the right is my attempt at making the terrain have some kind of texture to it, the third is my much better attempt that actaully created something that looks like terrain.
 - [x] Note that the landmass that you generate should not be flat - it's fine if you don't have mountains and valleys, but at least have some height variations.
 
 ## World Generation Part 2 taskset:
