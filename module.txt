@@ -1,0 +1,14 @@
+{
+    "id" : "MonkeyGenerator",
+    "version" : "0.1.0-SNAPSHOT",
+    "author" : "StripedMonkey",
+    "displayName" : "MonkeyGenerator",
+    "description" : "A Simple Terrain Generator for Terasology",
+    "dependencies" : [
+        {
+        "id": "Core",
+        "minVersion": "2.0.0"
+        }
+    ],
+    "serverSideOnly" : false
+}
