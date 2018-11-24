@@ -33,7 +33,7 @@ public class SurfaceProvider implements FacetProvider {
 
     @Override
     public void setSeed(long seed) {
-        surfaceNoise = new SubSampledNoise(new SimplexNoise(seed), new Vector2f(0.001f, 0.01f), 1);
+        surfaceNoise = new SubSampledNoise(new SimplexNoise(seed), new Vector2f(0.03f, 0.03f), 1);
     }
 
     @Override

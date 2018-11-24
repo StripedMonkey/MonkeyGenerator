@@ -21,39 +21,36 @@ import org.terasology.world.block.Block;
 import org.terasology.world.block.BlockManager;
 import org.terasology.world.chunks.CoreChunk;
 import org.terasology.world.generation.Region;
-import org.terasology.world.generation.WorldRasterizer;
+import org.terasology.world.generation.WorldRasterizerPlugin;
+import org.terasology.world.generation.facets.SeaLevelFacet;
 import org.terasology.world.generation.facets.SurfaceHeightFacet;
+import org.terasology.world.generator.plugin.RegisterPlugin;
 
+@RegisterPlugin
+public class LakesRasterizer implements WorldRasterizerPlugin {
 
-public class MonkeyRasterizer implements WorldRasterizer {
-
-    private Block dirt;
-    private Block grass;
-    private Block water;
+    private Block liquid;
 
     @Override
     public void initialize() {
-        dirt = CoreRegistry.get(BlockManager.class).getBlock("Core:Dirt");
-        grass = CoreRegistry.get(BlockManager.class).getBlock("Core:Grass");
-        water = CoreRegistry.get(BlockManager.class).getBlock("Core:Water");
+        liquid = CoreRegistry.get(BlockManager.class).getBlock("Core:Lava");
     }
 
     @Override
     public void generateChunk(CoreChunk chunk, Region chunkRegion) {
 
-
         SurfaceHeightFacet surfaceHeightFacet = chunkRegion.getFacet(SurfaceHeightFacet.class);
+        int seaLevel = chunkRegion.getFacet(SeaLevelFacet.class).getSeaLevel();
 
         for (Vector3i position : chunkRegion.getRegion()) {
 
             float surfaceHeight = surfaceHeightFacet.getWorld(position.x, position.z);
 
-            if (position.y < surfaceHeight - 1) {
-                chunk.setBlock(ChunkMath.calcBlockPos(position), dirt);
-            } else if (position.y < surfaceHeight) {
-                chunk.setBlock(ChunkMath.calcBlockPos(position), grass);
+            if (position.y < seaLevel && position.y > surfaceHeight) {
+                chunk.setBlock(ChunkMath.calcBlockPos(position), liquid);
             }
         }
-
     }
+
+
 }

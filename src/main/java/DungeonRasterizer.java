@@ -14,7 +14,11 @@
  * limitations under the License.
  */
 
+import java.util.Map.Entry;
+
 import org.terasology.math.ChunkMath;
+import org.terasology.math.Region3i;
+import org.terasology.math.geom.BaseVector3i;
 import org.terasology.math.geom.Vector3i;
 import org.terasology.registry.CoreRegistry;
 import org.terasology.world.block.Block;
@@ -22,38 +26,36 @@ import org.terasology.world.block.BlockManager;
 import org.terasology.world.chunks.CoreChunk;
 import org.terasology.world.generation.Region;
 import org.terasology.world.generation.WorldRasterizer;
-import org.terasology.world.generation.facets.SurfaceHeightFacet;
 
 
-public class MonkeyRasterizer implements WorldRasterizer {
+public class DungeonRasterizer implements WorldRasterizer {
 
-    private Block dirt;
-    private Block grass;
-    private Block water;
+    private Block stone;
 
     @Override
     public void initialize() {
-        dirt = CoreRegistry.get(BlockManager.class).getBlock("Core:Dirt");
-        grass = CoreRegistry.get(BlockManager.class).getBlock("Core:Grass");
-        water = CoreRegistry.get(BlockManager.class).getBlock("Core:Water");
+        stone = CoreRegistry.get(BlockManager.class).getBlock("Core:Stone");
     }
 
     @Override
     public void generateChunk(CoreChunk chunk, Region chunkRegion) {
+        DungeonFacet dungeonFacet = chunkRegion.getFacet(DungeonFacet.class);
 
+        for ( Entry<BaseVector3i, Dungeon> entry : dungeonFacet.getWorldEntries().entrySet()) {
 
-        SurfaceHeightFacet surfaceHeightFacet = chunkRegion.getFacet(SurfaceHeightFacet.class);
+            Vector3i centerDungeonPosition = new Vector3i(entry.getKey());
 
-        for (Vector3i position : chunkRegion.getRegion()) {
+            int extent = entry.getValue().getExtent();
 
-            float surfaceHeight = surfaceHeightFacet.getWorld(position.x, position.z);
+            centerDungeonPosition.add(0, extent, 0);
+            Region3i walls = Region3i.createFromCenterExtents(centerDungeonPosition, extent);
+            Region3i inside = Region3i.createFromCenterExtents(centerDungeonPosition, extent- 1);
 
-            if (position.y < surfaceHeight - 1) {
-                chunk.setBlock(ChunkMath.calcBlockPos(position), dirt);
-            } else if (position.y < surfaceHeight) {
-                chunk.setBlock(ChunkMath.calcBlockPos(position), grass);
+            for (Vector3i newBlockPosition : walls) {
+                if (chunkRegion.getRegion().encompasses(newBlockPosition) && !inside.encompasses(newBlockPosition)) {
+                    chunk.setBlock(ChunkMath.calcBlockPos(newBlockPosition), stone);
+                }
             }
         }
-
     }
 }

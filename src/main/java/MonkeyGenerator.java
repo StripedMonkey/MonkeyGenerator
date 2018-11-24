@@ -22,20 +22,24 @@ import org.terasology.world.generation.WorldBuilder;
 import org.terasology.world.generator.RegisterWorldGenerator;
 import org.terasology.world.generator.plugin.WorldGeneratorPluginLibrary;
 
-@RegisterWorldGenerator(id = "monkeyWorld", displayName = "Example MonkeyWorld")
+@RegisterWorldGenerator(id = "monkeyWorld", displayName = "Monkey World")
 public class MonkeyGenerator extends BaseFacetedWorldGenerator {
     @In
     private WorldGeneratorPluginLibrary worldGeneratorPluginLibrary;
 
     public MonkeyGenerator(SimpleUri uri) {
-     super(uri);
+        super(uri);
     }
 
     @Override
     protected WorldBuilder createWorld() {
         return new WorldBuilder(worldGeneratorPluginLibrary)
                 .addRasterizer(new MonkeyRasterizer())
+                .addRasterizer(new DungeonRasterizer())
                 .addProvider(new SurfaceProvider())
-                .addProvider(new SeaLevelProvider(0));
+                .addProvider(new SeaLevelProvider(0))
+                .addProvider(new MountainsProvider())
+                .addProvider(new DungeonProvider())
+                .addPlugins();
     }
 }
