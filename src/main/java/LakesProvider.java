@@ -37,7 +37,7 @@ public class LakesProvider implements FacetProviderPlugin {
 
     @Override
     public void setSeed(long seed) {
-        lakes = new PerlinNoise(seed * 3);
+        lakes = new PerlinNoise(seed * 3/4);
     }
 
     @Override
